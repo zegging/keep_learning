@@ -72,6 +72,42 @@ class ListNode:
 
 # def isPalindrome(head: ListNode) -> bool:
 
+# 空间复杂度O(1)
+# https://www.bilibili.com/video/BV13g41157hK/?p=6&share_source=copy_web&vd_source=efc4a4eb35d298b244a48a32c9e1fb8b&t=5285
+# def isPalindrome(head: ListNode) -> bool:
+
+def getIntersectionNode(headA: ListNode, headB: ListNode) -> [ListNode]:
+    '''
+    空间复杂度O(1)的做法
+    :param self:
+    :param head:
+    :return:
+    '''
+    nodea, nodeb = headA, headB
+    a, b = 0, 0
+    while nodea != None:
+        nodea = nodea.next
+        a += 1
+    while nodeb != None:
+        nodeb = nodeb.next
+        b += 1
+    if nodea != nodeb:
+        return None
+
+    nodea, nodeb = headA, headB
+    step = a-b
+    if step >= 0:
+        while step > 0:
+            nodea = nodea.next
+            step -= 1
+    else:
+        while step < 0:
+            nodeb = nodeb.next
+            step += 1
+    while True:
+        if nodea == nodeb:
+            return nodea
+        nodea, nodeb = nodea.next, nodeb.next
 
 
 
