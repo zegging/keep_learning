@@ -382,6 +382,22 @@ def lowestCommonAncestor(head: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'Tre
 # 1. p,q中的一个是另一个的最近公共祖先
 # 2. p,q的最近公共祖先是第三个结点
 
+def lowestCommonAncestor(root, p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
+    def dfs(node):
+        if (node == p or node == q or node == None):
+            return node
+        l = dfs(node.left) 
+        r = dfs(node.right)
+        if l and r:
+            return node
+        elif l:
+            return l
+        elif r:
+            return r 
+        else:
+            return None
+    return dfs(root)
+
 # 后继结点和前驱结点，中序遍历中一个结点的后一个结点和前一个结点
 
 # 二叉树的序列话和反序列化
