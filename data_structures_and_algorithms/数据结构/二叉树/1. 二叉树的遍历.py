@@ -1,4 +1,7 @@
 # 二叉树的递归序，就是不断的返回自己的结点（回到传入参数是这个结点的代码中）
+# 参考：【精准空降到 53:48】 https://www.bilibili.com/video/BV13g41157hK/?p=7&share_source=copy_web&vd_source=efc4a4eb35d298b244a48a32c9e1fb8b&t=3228
+
+# 根据满二叉树的节点编号规则：若根节点编号为 u，则其左子节点编号为 u << 1，其右节点编号为 u << 1 | 1。
 # Definition for a binary tree node.
 class TreeNode:
     def __init__(self, x):
@@ -43,18 +46,165 @@ head = l[1]
 # 后序：任意子树都是先左再右最后头：3次打印
 
 # 非递归实现输出
+# 弹出目标栈的时候就打印，所以打印顺序依赖于目标栈的压栈顺序
+
+# 先序
 def preOrder(head: TreeNode):
+    '''
+    1. 先弹出结点cur并打印cur
+    2. 判断存在，先压入cur右结点再压入cur左结点
+    3. 前往1. 步骤
+
+    这样保证每次先弹出头结点并打印，然后因为压栈的顺序，先弹出此head的左节点，然后再弹出此head的右结点。
+    :param head:
+    :return:
+    '''
     if head != None:
         stack = []
         stack.append(head)
-        while stack:
+        while stack != []:
             head = stack.pop()
             print(head.val, end=' ')
-            if head.right:
+            if head.right != None:
                 stack.append(head.right)
-            if head.left:
+            if head.left != None:
                 stack.append(head.left)
 
+# 后序
+def posOrder(head: TreeNode):
+    '''
+    先初始化两个栈stack1，stack2。1用作中间栈，2用作打印顺序收集栈。1栈中弹出的顺序是‘头右左’，所以2中压入的顺序是‘头右左’，2中弹出打印的顺序是‘左右头’。
+    1. 弹出当前结点cur
+    2. 把cur压入收集栈
+    3. 先压左再压右
+    4. 前往1.步骤
+    :param head:
+    :return:
+    '''
+    if head != None:
+        stack1 = []
+        stack2 = []
+        stack1.append(head)
+        while stack1 != []:
+            head = stack1.pop()
+            stack2.append(head)
+            if head.left != None:
+                stack1.append(head.left)
+            if head.right != None:
+                stack1.append(head.right)
+        while stack2 != []:
+            print(stack2.pop().val, end=' ')
+
+# 中序
+def inoreder(head: TreeNode):
+    '''
+    打印顺序是‘左中右’，所以弹出的顺序是‘左中右’，所以head的所有左结点都必须先压入栈中。
+    整棵树被左边界分解（叶子结点是它自己），对于右树后做操作，保证先打印左树和头结点。
+    1. 整棵树的左边界全部先压入栈中
+    2. 依次弹出结点的过程中，对右树重复1操作
+    :param head:
+    :return:
+    '''
+    if head != None:
+        stack = []
+        while stack != [] or head != []:
+            if head != None:
+                stack.append(head)
+                head = head.left
+            else:
+                head = stack.pop()
+                print(head.val)
+                head = head.right
+
+
+# 二叉树的优先遍历
+# 二叉树的深度优先遍历就是先序遍历，
+# 二叉树的宽度优先遍历使用队列，就是层序遍历。
+# 参考：https://www.bilibili.com/video/BV13g41157hK/?p=7&share_source=copy_web&vd_source=efc4a4eb35d298b244a48a32c9e1fb8b&t=6355
+
+def levelOrder(head: TreeNode):
+    '''
+
+    :param head:
+    :return:
+    '''
+    if head == None:
+        return None
+    queueList = []
+    queueList.append(head)
+    while queueList != []:
+        cur = queueList.pop()
+        print(cur.val)
+        if cur.left != None:
+            queueList.insert(0, cur.left)
+        if cur.right != None:
+            queueList.insert(0, cur.right)                
+                
+# 求一颗二叉树的最大宽度（不包括None）不同于leetcode 662. https://leetcode.cn/problems/maximum-width-of-binary-tree/
+#
+# def widthOfTree(root):
+#     '''
+#     使用字典保存行号信息
+#     :param root:
+#     :return:
+#     '''
+#     if root == None:
+#         return 0
+#     queue = []
+#     queue.insert(0, root)
+#     levalMap = {}
+#     levalMap[root] = 1
+#     curLevel = 1
+#     curLevelNodes = 0
+#     m = 0
+#     while queue != []:
+#         cur = queue.pop()
+#         curNodeLevel = levalMap[cur]
+#         if curNodeLevel == curLevel:
+#             curLevelNodes += 1
+#         else:
+#             m = max(m, curLevelNodes)
+#             curLevel += 1
+#             curLevelNodes = 1
+#         if cur.left != None:
+#             levalMap[cur.left] = curNodeLevel+1
+#             queue.insert(0, cur.left)
+#         if cur.right != None:
+#             levalMap[cur.right] = curNodeLevel+1
+#             queue.insert(0, cur.right)
+#     return max(m, curLevelNodes)
+
+def widthOfTree(root):
+    '''
+    使用队列
+    :param root:
+    :return:
+    '''
+    if root == None:
+        return 0
+    curLevelEnd = root
+    nextLevelEnd = None
+    curLevelNodes = 0
+    Max = 0
+    queue = []
+    queue.insert(0, root)
+    while queue != []:
+        cur = queue.pop()
+        curLevelNodes += 1
+        if cur.left != None:
+            queue.insert(0, cur.left)
+            nextLevelEnd = cur.left
+        if cur.right != None:
+            queue.insert(0, cur.right)
+            nextLevelEnd = curLevelEnd.right
+        if cur == curLevelEnd:
+            Max = max(curLevelNodes, Max)
+            curLevelEnd = nextLevelEnd
+            curLevelNodes = 0
+    return Max
+
+                
+                
 # 判断一棵树是不是搜索二叉树 Binary Search Tree
 
 # 若任意节点的左子树不空，则左子树上所有节点的值均小于它的根节点的值；
