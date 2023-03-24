@@ -399,6 +399,54 @@ def lowestCommonAncestor(root, p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
     return dfs(root)
 
 # 后继结点和前驱结点，中序遍历中一个结点的后一个结点和前一个结点
+# 二叉树的中序后继节点
+# 有所不同 剑指 Offer II 053. 二叉搜索树中的中序后继 https://leetcode.cn/problems/P5rCT8/
+
+# 考虑后继节点的情况：
+# 1. p有right，则p的后继结点是right的最左结点
+# 2. p没有right，如果p是p的父节点的left，则p的后继结点是p的父结点
+# 3. p没有right，如果p不是p的父节点的left，则不断上升判断父节点q是不是q的父节点的左结点m，如果是，则返回m
+# 4. 最右边的结点没有后继结点，返回None
+
+def getLeftMost(node):
+    if node == None:
+        return node
+    while node.left != None:
+        node = node.left
+    return node
+
+# 找到二叉树中某个结点的父结点列表
+def getFatherNode(head, p):
+    if head == p:
+        return [head]
+    if head == None:
+        return
+    left = getFatherNode(head.left, p)
+    if left:
+        left.append(head)
+        return left
+    right = getFatherNode(head.right, p)
+    if right:
+        right.append(head)
+        return right
+    return []
+
+def inorderSuccessor(head: TreeNode, p: TreeNode):
+    if p == None:
+        return head
+    if p.right != None:
+        return getLeftMost(p.right)
+    else:
+        parent_list = getFatherNode(head, p)[::-1]
+        if not parent_list:
+            return None
+        cur = parent_list.pop()
+        while parent_list:
+            parent = parent_list.pop()
+            if cur == parent.left:
+                return parent
+            cur = parent
+        return None
 
 # 二叉树的序列话和反序列化
 # 297. 二叉树的序列化与反序列化
