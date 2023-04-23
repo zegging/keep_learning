@@ -124,7 +124,7 @@ print(arr)
 #     :return:
 #     '''
 #     if l == r:
-#         return arr[l]
+#         return
 #     mid = l + ((r-l) >> 1)
 #     mergeSort(arr, l, mid)
 #     mergeSort(arr, mid+1, r)
@@ -174,7 +174,7 @@ print(arr)
 #     :return:
 #     '''
 #     if l == r:
-#         return arr[l]
+#         return
 #     mid = l + ((r-l) >> 1)
 #     mergeSort(arr, l, mid)
 #     mergeSort(arr, mid+1, r)
