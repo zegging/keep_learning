@@ -52,7 +52,7 @@ def mergeSort(arr: list[int], l:int, r:int):
     :return:
     '''
     if l == r:
-        return arr[l]
+        return # 这里不需要向后传值，我们只是借用了系统帮我们压栈，实际的排序赋值操作都是在merge()中完成的
     mid = l + ((r-l) >> 1)
     mergeSort(arr, l, mid)
     mergeSort(arr, mid+1, r)
