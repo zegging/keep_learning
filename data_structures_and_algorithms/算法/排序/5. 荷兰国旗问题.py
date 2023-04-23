@@ -14,25 +14,25 @@
 # j指向小于给定数的范围最右侧位置
 # 开始时j指向-1
 
-# def sort_double(arr:list[int], num:int) -> list[int]:
-#     n = len(arr)
-#
-#     if n == 0:
-#         return arr
-#     i = 0
-#
-#     j = -1
-#     while i <= n-1:
-#         if arr[i] <= num:
-#             arr[i], arr[j+1] = arr[j+1], arr[i]
-#             i += 1
-#             j += 1
-#         else:
-#             i += 1
-#     return arr
-#
-# arr = sort_double([3,5,6,7,4,3,5,8,-1,20,8,213,-123,0], 5)
-# print(arr)
+def sort_double(arr:list[int], num:int) -> list[int]:
+    n = len(arr)
+
+    if n == 0:
+        return arr
+    i = 0
+
+    j = -1
+    while i <= n-1:
+        if arr[i] <= num:
+            arr[i], arr[j+1] = arr[j+1], arr[i] # 将这个小于等于的数转移到小于区的最右边的下一位置，这样整个小于区就相当于向右扩大了一位
+            i += 1
+            j += 1
+        else:
+            i += 1
+    return arr
+
+arr = sort_double([3,5,6,7,4,3,5,8,-1,20,8,213,-123,0], 5)
+print(arr)
 
 # 题目描述：
 # 一个数组arr和一个给定的数num，要求排序后数组的左部分的数均小于num，中间部分的数均等于num，右部分的数均大于num
