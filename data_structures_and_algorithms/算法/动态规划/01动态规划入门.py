@@ -4,6 +4,17 @@
 
 '''
 动态规划入门：暴力递归 --> 记忆化搜索 --> 动态规划
+注意在动态规划中如果用迭代的话
+【先写自增 += 和自减 -=】
+line = 4
+while line >= 0:
+    row = 0
+    while row <= S:
+        # row += 1
+    # line -= 1
+【行号注意 +1】
+dp[line][row] = dp[line + 1][row] + dp[line][row + arr[line]]
+dp[line][row] = dp[line + 1][row] + dp[line + 1][row + arr[line]]
 '''
 
 '''
