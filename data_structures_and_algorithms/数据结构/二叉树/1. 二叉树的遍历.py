@@ -1,5 +1,13 @@
-# 二叉树的递归序，就是不断的返回自己的结点（回到传入参数是这个结点的代码中）
-# 参考：【精准空降到 53:48】 https://www.bilibili.com/video/BV13g41157hK/?p=7&share_source=copy_web&vd_source=efc4a4eb35d298b244a48a32c9e1fb8b&t=3228
+''''''
+'''
+二叉树的递归序，就是不断的返回小的入口函数中判断是否还有代码需要向下执行
+                   1
+               2       3
+             4   5   6   7
+            n n n n n n n n
+递归序就是 124442555213666377731
+参考：【精准空降到 53:48】 https://www.bilibili.com/video/BV13g41157hK/?p=7&share_source=copy_web&vd_source=efc4a4eb35d298b244a48a32c9e1fb8b&t=3228
+'''
 
 # 根据满二叉树的节点编号规则：若根节点编号为 u，则其左子节点编号为 u << 1，其右节点编号为 u << 1 | 1。
 # Definition for a binary tree node.
@@ -39,16 +47,37 @@ l[3].right = l[7]
 head = l[1]
 
 
+'''
+在递归序的基础上可以得到三种不同的遍历方式：先序、中序、后序。
 
-# 在递归序的基础上可以得到三种不同的遍历方式：先序、中序、后序。
-# 先序：任意子树都是先头再左最后右：1次打印
-# 中序：任意子树都是先左再中最后右：2次打印
-# 后序：任意子树都是先左再右最后头：3次打印
+【先 中 后】指的都是头结点在打印三个结点的时候的相对位置
 
-# 非递归实现输出
-# 弹出目标栈的时候就打印，所以打印顺序依赖于目标栈的压栈顺序
+先序：任意子树都是先头再左最后右【头左右】：1次打印
+中序：任意子树都是先左再中最后右【左头右】：2次打印
+后序：任意子树都是先左再右最后头【左右头】：3次打印
+'''
 
-# 先序
+
+
+'''
+非递归实现输出
+弹出目标栈的时候就打印，所以打印顺序依赖于目标栈的压栈顺序
+'''
+
+'''
+先序，对与每一颗子树来说打印顺序都是【头左右】
+
+将头结点压入栈
+
+1）从栈中弹出一个结点
+2）打印这个弹出结点
+3）先右后左将子节点压入栈
+4）周而复始
+
+3保证了左结点永远比右结点先弹出并处理
+
+思考？如果压栈的顺序是先左后右呢？-> 后序
+'''
 def preOrder(head: TreeNode):
     '''
     1. 先弹出结点cur并打印cur
@@ -70,7 +99,20 @@ def preOrder(head: TreeNode):
             if head.left != None:
                 stack.append(head.left)
 
-# 后序
+'''
+后序，对与每一颗子树来说打印顺序都是【左右头】
+
+我们需要两个栈帮助处理，一个是中间栈，一个是收集栈，最后打印是从收集栈中弹出打印的。
+
+将头结点压入中间栈
+
+1）从中间栈弹出结点cur
+2）并将结点cur压入收集栈
+3）将cur子节点【先左后右】压入栈
+4）周而复始
+
+直到中间栈为空，将收集栈中的结点依次弹出并打印
+'''
 def posOrder(head: TreeNode):
     '''
     先初始化两个栈stack1，stack2。1用作中间栈，2用作打印顺序收集栈。1栈中弹出的顺序是‘头右左’，所以2中压入的顺序是‘头右左’，2中弹出打印的顺序是‘左右头’。
@@ -95,10 +137,19 @@ def posOrder(head: TreeNode):
         while stack2 != []:
             print(stack2.pop().val, end=' ')
 
-# 中序
+'''
+中序，对与每一颗子树来说打印顺序都是【左右头】
+
+我们初始化一个栈
+
+1）将整棵树的左边界结点全部压入栈中
+2）依次弹出结点并打印
+3）如果右数不为空，将右树的左边界全部压入栈
+4）周而复始，直到栈为空
+'''
 def inoreder(head: TreeNode):
     '''
-    打印顺序是‘左中右’，所以弹出的顺序是‘左中右’，所以head的所有左结点都必须先压入栈中。
+    打印顺序是‘左中右’，所以弹出的顺序是‘左中右’，所以head的所有左边界结点都必须先压入栈中。
     整棵树被左边界分解（叶子结点是它自己），对于右树后做操作，保证先打印左树和头结点。
     1. 整棵树的左边界全部先压入栈中
     2. 依次弹出结点的过程中，对右树重复1操作
@@ -117,14 +168,25 @@ def inoreder(head: TreeNode):
                 head = head.right
 
 
-# 二叉树的优先遍历
-# 二叉树的深度优先遍历就是先序遍历，
-# 二叉树的宽度优先遍历使用队列，就是层序遍历。
-# 参考：https://www.bilibili.com/video/BV13g41157hK/?p=7&share_source=copy_web&vd_source=efc4a4eb35d298b244a48a32c9e1fb8b&t=6355
+'''
+二叉树的优先遍历
+二叉树的深度优先遍历就是先序遍历，
+二叉树的宽度优先遍历使用队列，就是层序遍历。
+参考：https://www.bilibili.com/video/BV13g41157hK/?p=7&share_source=copy_web&vd_source=efc4a4eb35d298b244a48a32c9e1fb8b&t=6355
+'''
 
+'''
+宽度优先遍历用队列
+
+头 ------> 尾
+
+将头结点压入栈中
+1）从尾巴弹出结点
+2）将子节点用【先左后右】的顺序压入栈
+3）周而复始直到队列为空
+'''
 def levelOrder(head: TreeNode):
     '''
-
     :param head:
     :return:
     '''
@@ -140,68 +202,7 @@ def levelOrder(head: TreeNode):
         if cur.right != None:
             queueList.insert(0, cur.right)                
                 
-# 求一颗二叉树的最大宽度（不包括None）不同于leetcode 662. https://leetcode.cn/problems/maximum-width-of-binary-tree/
-#
-# def widthOfTree(root):
-#     '''
-#     使用字典保存行号信息
-#     :param root:
-#     :return:
-#     '''
-#     if root == None:
-#         return 0
-#     queue = []
-#     queue.insert(0, root)
-#     levalMap = {}
-#     levalMap[root] = 1
-#     curLevel = 1
-#     curLevelNodes = 0
-#     m = 0
-#     while queue != []:
-#         cur = queue.pop()
-#         curNodeLevel = levalMap[cur]
-#         if curNodeLevel == curLevel:
-#             curLevelNodes += 1
-#         else:
-#             m = max(m, curLevelNodes)
-#             curLevel += 1
-#             curLevelNodes = 1
-#         if cur.left != None:
-#             levalMap[cur.left] = curNodeLevel+1
-#             queue.insert(0, cur.left)
-#         if cur.right != None:
-#             levalMap[cur.right] = curNodeLevel+1
-#             queue.insert(0, cur.right)
-#     return max(m, curLevelNodes)
 
-def widthOfTree(root):
-    '''
-    使用队列
-    :param root:
-    :return:
-    '''
-    if root == None:
-        return 0
-    curLevelEnd = root
-    nextLevelEnd = None
-    curLevelNodes = 0
-    Max = 0
-    queue = []
-    queue.insert(0, root)
-    while queue != []:
-        cur = queue.pop()
-        curLevelNodes += 1
-        if cur.left != None:
-            queue.insert(0, cur.left)
-            nextLevelEnd = cur.left
-        if cur.right != None:
-            queue.insert(0, cur.right)
-            nextLevelEnd = curLevelEnd.right
-        if cur == curLevelEnd:
-            Max = max(curLevelNodes, Max)
-            curLevelEnd = nextLevelEnd
-            curLevelNodes = 0
-    return Max
 
                 
                 

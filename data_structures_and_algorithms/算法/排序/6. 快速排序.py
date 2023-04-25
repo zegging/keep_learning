@@ -11,7 +11,8 @@ import random
 # from ..examination import IntListGenerator
 
 '''
-    我们需要注意到如果使用 [小于、等于|大于]这种方式做快排，则为0，1排序，即一个元素不是0就是1.因此判断标准是01的都可以做为快排的条件，比如：左面是奇数，右边是偶数。
+    我们需要注意到如果使用 [小于、等于|大于]这种方式做快排，则为0，1排序，即一个元素不是0就是1。
+    因此判断标准是01的都可以做为快排的条件，比如：左面是奇数，右边是偶数。
 '''
 # 快排参考：【精准空降到 2:02:15】 https://www.bilibili.com/video/BV13g41157hK/?p=4&share_source=copy_web&vd_source=efc4a4eb35d298b244a48a32c9e1fb8b&t=7335
 # 时间复杂度O(nlogn)
