@@ -10,13 +10,14 @@ for each in lst:
 迭代器iterator
 表示数据流的对象，可以使用next()函数不断从这个对象中获取数据
 
-iterable更像是一个数据的保存者，一个container，可以完全不知道下一个读取其中的数据的位置信息。
+iterable更像是一个数据的保存者，一个container，可以完全不知道下一个将要读取的数据的位置信息。
 iterable需要有能力产生一个iterator。
 从实现上看要么拥有__iter__()，要么有__getitem__()。
 这两个函数都是为了保证iterable可以在iter()的作用下返回一个iterator
 
 iterator一定是有状态的，但是它并不一定需要实现一个container
-从实现上看必须拥有__next__()，用来返回下一个iterable中的值
+意味着iterator需要知道返回的数据和接下来将要返回的数据的位置。
+从实现上看必须拥有__next__()，保证iterator在被next()作用的时候可以返回下一个iterable中的值
 '''
 
 dis.dis('lst = [1,2,3]\nfor each in lst:\n\tpass')
