@@ -10,6 +10,19 @@
 
 这是当我在给我的 Django 项目编写单元测试的时候遇到的第一个错误（项目已经有很多功能了但是还没有单元测试，这个要问前辈……）。原因很简单，这是因为我配置的`default`数据库是由中间件部门维护的DBV，`user：dbuser`并没有在服务端创建数据库的权限。
 
+当运行`./manage.py test`时，Django 会查看`TEST_RUNNER`的配置来决定做什么。默认情况下，`TEST_RUNNER`指向 `'django.test.runner.DiscoverRunner'`。这个类定义了默认的 Django 测试行为。这个行为包括：
+
+1. 进行全局性的测试前设置。
+2. 在当前目录下的任何文件中寻找名称符合 test*.py 模式的测试。
+3. 创建测试数据库。
+4. 运行 migrate 将模型和初始数据安装到测试数据库中。
+5. 运行 系统检查。
+6. 运行找到的测试。
+7. 销毁测试数据库。
+8. 进行全局性的测试后拆解。
+
+如果你定义了自己的测试运行器类，并将`TEST_RUNNER`指向该类，那么每当你运行`./manage.py test`时，Django 就会执行你的测试运行器。通过这种方式，可以使用任何可以从 Python 代码中执行的测试框架，也可以修改 Django 测试执行过程来满足你的任何测试需求。
+
 Django 的单元测试如果使用`django.test.TestCase`类的话会在基类`django.test.TransactionTestCase`中指明使用默认数据库`default`的配置链接服务端。
 
 ```python
